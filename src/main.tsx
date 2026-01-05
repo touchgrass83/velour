@@ -4,6 +4,10 @@ import "./index.css";
 import { BrowserRouter } from "react-router-dom";
 import AppRouter from "./router/AppRouter";
 
+document.addEventListener("contextmenu", function (event) {
+  event.preventDefault();
+});
+
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>
