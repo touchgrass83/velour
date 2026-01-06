@@ -39,7 +39,7 @@ export default function LofiVideos() {
 
   const swipeBind = useDrag(
     ({ last, movement: [mx, my], velocity: [vx, vy] }) => {
-      if (!last || !canSwipe) return;
+      if (!last) return;
 
       const absX = Math.abs(mx);
       const absY = Math.abs(my);
@@ -57,6 +57,8 @@ export default function LofiVideos() {
   );
 
   const handleVideoChange = (operation: number) => {
+    if (!canSwipe) return;
+
     disableBtns();
 
     let currentVideo = JSON.parse(
@@ -67,6 +69,7 @@ export default function LofiVideos() {
     );
 
     lofiVideoRefs[currentVideo].current?.pause();
+    lofiVideoRefs[currentVideo].current!.style.scale = "0.95";
 
     switch (operation) {
       case 1:
@@ -85,7 +88,6 @@ export default function LofiVideos() {
         break;
     }
 
-    lofiVideoRefs[currentVideo].current?.pause();
     lofiVideoRefs[currentVideo].current?.play();
 
     timedScrollIntoViewX(
@@ -96,19 +98,18 @@ export default function LofiVideos() {
 
     localStorage.setItem("lofi-video-index", JSON.stringify(currentVideo));
 
-    setTimeout(enableBtns, 500);
+    setTimeout(() => {
+      enableBtns();
+      lofiVideoRefs[currentVideo].current!.style.scale = "1";
+    }, 500);
   };
 
   const disableBtns = () => {
-    videoBtnsRef[0].current!.disabled = true;
-    videoBtnsRef[1].current!.disabled = true;
     canSwipe = false;
     setCanFullscreen(false);
   };
 
   const enableBtns = () => {
-    videoBtnsRef[0].current!.disabled = false;
-    videoBtnsRef[1].current!.disabled = false;
     canSwipe = true;
     setCanFullscreen(true);
 
@@ -124,6 +125,7 @@ export default function LofiVideos() {
     );
 
     lofiVideoRefs[currentVideo].current?.play();
+    lofiVideoRefs[currentVideo].current!.style.scale = "1";
     videosContainerRef.current!.scrollLeft = currentVideo * window.innerWidth;
   }, []);
 
@@ -137,7 +139,12 @@ export default function LofiVideos() {
       >
         {lofiVideos.map((videoUrl: string, index: number) => (
           <div key={index} className="video-container">
-            <video ref={lofiVideoRefs[index]} muted loop>
+            <video
+              ref={lofiVideoRefs[index]}
+              muted
+              loop
+              style={{ scale: 0.95 }}
+            >
               <source src={videoUrl} type="video/mp4" />
             </video>
           </div>

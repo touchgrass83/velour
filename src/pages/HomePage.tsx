@@ -4,6 +4,7 @@ import "/src/styles/home.css";
 import NavBar from "../components/NavBar";
 import LofiVideos from "../components/LofiVideos";
 import FullScreenBtn from "../components/FullScreen";
+import MusicApp from "../components/apps/MusicApp";
 
 export default function HomePage() {
   const fullscreenHandle = useFullScreenHandle();
@@ -16,6 +17,8 @@ export default function HomePage() {
         <FullScreenBtn fullscreenHandle={fullscreenHandle} />
 
         <NavBar />
+
+        <MusicApp />
       </div>
     </FullScreen>
   );

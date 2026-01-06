@@ -32,6 +32,8 @@ video {
   object-fit: cover;
 
   border: none;
+
+  transition: scale 0.5s ease;
 }
 
 .nav-btn-container {
@@ -47,20 +49,75 @@ video {
 }
 
 .nav-btn {
-  height: 6px;
+  height: 4px;
   width: 300px;
 
-  position: relative;
+  position: absolute;
   bottom: 6px;
 
   border-radius: 6px;
-  background-color: #ffffff09;
+  background-color: #ffffff1a;
 
-  transition: all 0.4s ease-in-out;
+  transition: background-color 0.4s ease-in-out, rotate 0 ease;
 }
 
 .nav-btn.active {
   background-color: #ffffff2a;
+}
+
+.nav {
+  height: 250px;
+  width: 250px;
+
+  position: absolute;
+  top: 205px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+  outline: 50px solid #ffffff1a;
+}
+
+.nav.active {
+  transition: all 0.5s ease-in-out;
+}
+
+.triangle {
+  position: absolute;
+  bottom: -90px;
+  pointer-events: none;
+
+  transform: scaleX(1.2);
+}
+
+.nav-items-container {
+  height: 350px;
+  width: 350px;
+  border-radius: 50%;
+  position: absolute;
+
+  top: calc(50% - 25px);
+  left: calc(50% - 25px);
+  transform: translate(-50%, -50%);
+}
+
+.nav-items {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  height: 50px;
+  width: 50px;
+
+  transform-origin: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: white;
+  font-weight: 500;
 }
 
 .fullscreen-btn {
