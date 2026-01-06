@@ -18,7 +18,7 @@ export default function MusicApp() {
   const pauseBtn = useRef<HTMLElement>(null);
   const playBtn = useRef<HTMLElement>(null);
 
-  const [musicIndex, setMusicIndex] = useState<number>(0);
+  const [musicIndex, _setMusicIndex] = useState<number>(0);
   const musicList: (object & Record<"name", string> & Record<"url", string>)[] =
     [{ name: "Title", url: "/assets/music/music-01/" }];
 
