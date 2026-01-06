@@ -103,7 +103,7 @@ export default function NavBar() {
           stroke="white"
           strokeWidth="5"
           strokeLinejoin="round"
-          fill="#ffffff2d"
+          fill="#00000083"
         />
       </svg>
 

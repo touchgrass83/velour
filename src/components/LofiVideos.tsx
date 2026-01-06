@@ -61,12 +61,7 @@ export default function LofiVideos() {
 
     disableBtns();
 
-    let currentVideo = JSON.parse(
-      localStorage.getItem("lofi-video-index") ??
-        (lofiVideos.length % 2 == 0
-          ? `${lofiVideos.length / 2}`
-          : `${(lofiVideos.length + 1) / 2}`)
-    );
+    let currentVideo = getCurrentVideo();
 
     lofiVideoRefs[currentVideo].current?.pause();
     lofiVideoRefs[currentVideo].current!.style.scale = "0.95";
@@ -116,13 +111,22 @@ export default function LofiVideos() {
     document.body.style.pointerEvents = "";
   };
 
-  useEffect(() => {
-    let currentVideo = JSON.parse(
+  const getCurrentVideo = () => {
+    return JSON.parse(
       localStorage.getItem("lofi-video-index") ??
         (lofiVideos.length % 2 == 0
           ? `${lofiVideos.length / 2}`
           : `${(lofiVideos.length + 1) / 2}`)
     );
+  };
+
+  window.addEventListener("resize", () => {
+    let currentVideo = getCurrentVideo();
+    videosContainerRef.current!.scrollLeft = currentVideo * window.innerWidth;
+  });
+
+  useEffect(() => {
+    let currentVideo = getCurrentVideo();
 
     lofiVideoRefs[currentVideo].current?.play();
     lofiVideoRefs[currentVideo].current!.style.scale = "1";

@@ -57,7 +57,7 @@ export function appEnabled(app: number): boolean | null {
 
 export function enableApp(app: number) {
   app--;
-  if (app < 0 || app > apps.length - 1) return;
+  if ((app < 0 || app > apps.length - 1) && !apps[app]) return;
   apps[app] = true;
 
   notifyApp(app + 1, true);
@@ -65,7 +65,7 @@ export function enableApp(app: number) {
 
 export function disableApp(app: number) {
   app--;
-  if (app < 0 || app > apps.length - 1) return;
+  if ((app < 0 || app > apps.length - 1) && apps[app]) return;
   apps[app] = false;
 
   notifyApp(app + 1, false);

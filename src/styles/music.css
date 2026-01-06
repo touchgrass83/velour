@@ -7,6 +7,10 @@
   border-radius: 8px;
   background-color: #d9d9d921;
 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
   backdrop-filter: blur(2px);
 
   overflow: hidden;
@@ -14,7 +18,7 @@
 
 .music-app-container .top-bar {
   height: 20px;
-  width: 200px;
+  width: 100%;
 
   background-color: #ffffff55;
 
@@ -46,4 +50,86 @@
   width: 8px;
 
   border-radius: 50%;
+}
+
+.music-app-container .app-content-container {
+  display: flex;
+  flex-direction: column;
+
+  position: relative;
+
+  margin-top: 16px;
+}
+
+.app-music-thumbnail {
+  position: absolute;
+  top: -16px;
+  left: -50px;
+
+  width: 200px;
+  height: 200px;
+  box-shadow: 0px 0px 12px #00000025;
+}
+
+.music-lines-container {
+  height: 100px;
+  width: 100px;
+
+  position: absolute;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2px;
+}
+
+.music-lines-container .music-line {
+  height: 20px;
+  width: 5px;
+
+  transform-origin: center;
+
+  background-color: #d9d9d9;
+  border: 0.5px solid white;
+}
+
+.music-title {
+  text-align: center;
+  text-transform: uppercase;
+  font-family: "Ubuntu", sans-serif;
+  font-weight: 500;
+  color: #ffffffaa;
+  margin-top: 90px;
+
+  z-index: 99;
+}
+
+.music-controls-container {
+  margin-top: 10px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+
+  color: white;
+  z-index: 99;
+}
+
+.music-controls-container i {
+  width: 20px;
+  height: 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@keyframes random-size {
+  0% {
+    height: 20px;
+  }
+  50% {
+    height: 50px;
+  }
 }
