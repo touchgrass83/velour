@@ -12,7 +12,7 @@ import "/src/styles/music.css";
 
 const useGesture = createUseGesture([dragAction, pinchAction]);
 
-export default function MusicApp() {
+export default function testApp() {
   const [appEnabled, setAppEnabled] = useState(false);
   useEffect(() => {
     const callback = (e: any) => {
@@ -52,7 +52,7 @@ export default function MusicApp() {
     y: 0,
     zoom: 1.5,
   }));
-  const ref = useRef<HTMLDivElement>(null);
+  const animatedRef = useRef<HTMLDivElement>(null);
 
   useGesture(
     {
@@ -68,7 +68,8 @@ export default function MusicApp() {
         memo,
       }) => {
         if (first) {
-          const { width, height, x, y } = ref.current!.getBoundingClientRect();
+          const { width, height, x, y } =
+            animatedRef.current!.getBoundingClientRect();
           const tx = ox - (x + width / 2);
           const ty = oy - (y + height / 2);
           memo = [style.x.get(), style.y.get(), tx, ty];
@@ -81,7 +82,7 @@ export default function MusicApp() {
       },
     },
     {
-      target: ref,
+      target: animatedRef,
       drag: { from: () => [style.x.get(), style.y.get()] },
       pinch: { scaleBounds: { min: 0.75, max: 1.5 }, rubberband: true },
     }
@@ -92,7 +93,7 @@ export default function MusicApp() {
       item && (
         <animated.div
           className="music-app-container"
-          ref={ref}
+          ref={animatedRef}
           style={{
             x: style.x,
             y: to([style.y, transitionStyles.y], (y, ty) => y + ty),
@@ -115,7 +116,7 @@ export default function MusicApp() {
               <div
                 className="circle control-exit"
                 style={{ backgroundColor: "#ff1e0088" }}
-                onClick={() => disableApp(1)}
+                onClick={() => disableApp(7)}
               ></div>
             </div>
           </div>

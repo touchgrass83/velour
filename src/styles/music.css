@@ -28,6 +28,9 @@
   align-items: center;
   justify-content: space-between;
   padding: 6px;
+
+  position: absolute;
+  z-index: 99;
 }
 
 .music-app-container .top-bar .app-title {
@@ -64,11 +67,13 @@
 .app-music-thumbnail {
   position: absolute;
   top: -16px;
-  left: -50px;
+  left: -25px;
 
   width: 200px;
   height: 200px;
   box-shadow: 0px 0px 12px #00000025;
+
+  transition: all 0.25s ease;
 }
 
 .music-lines-container {
@@ -76,6 +81,8 @@
   width: 100px;
 
   position: absolute;
+  left: 25px;
+  top: 20px;
 
   display: flex;
   justify-content: center;
@@ -94,12 +101,15 @@
 }
 
 .music-title {
+  height: 20px;
+  width: 150px;
+
   text-align: center;
   text-transform: uppercase;
   font-family: "Ubuntu", sans-serif;
   font-weight: 500;
   color: #ffffffaa;
-  margin-top: 90px;
+  margin-top: 110px;
 
   z-index: 99;
 }

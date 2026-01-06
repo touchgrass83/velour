@@ -15,12 +15,39 @@ const useGesture = createUseGesture([dragAction, pinchAction]);
 export default function MusicApp() {
   const [appEnabled, setAppEnabled] = useState<boolean>(false);
   const audioRef = useRef<HTMLAudioElement>(null);
+  const titleRef = useRef<HTMLSpanElement>(null);
+  const imageRef = useRef<HTMLImageElement>(null);
+  const musicLineRefs = [
+    useRef<HTMLDivElement>(null),
+    useRef<HTMLDivElement>(null),
+    useRef<HTMLDivElement>(null),
+    useRef<HTMLDivElement>(null),
+    useRef<HTMLDivElement>(null),
+    useRef<HTMLDivElement>(null),
+  ];
   const pauseBtn = useRef<HTMLElement>(null);
   const playBtn = useRef<HTMLElement>(null);
 
-  const [musicIndex, _setMusicIndex] = useState<number>(0);
   const musicList: (object & Record<"name", string> & Record<"url", string>)[] =
-    [{ name: "Title", url: "/assets/music/music-01/" }];
+    [
+      { name: "Windowlight", url: "/assets/music/music-01/" },
+      { name: "Still Sunset", url: "/assets/music/music-02/" },
+      { name: "City Breathing", url: "/assets/music/music-03/" },
+      { name: "Quiet Skyline", url: "/assets/music/music-04/" },
+      { name: "Firework Silence", url: "/assets/music/music-05/" },
+    ];
+
+  if (!localStorage.getItem("lofi-audio-index") == null)
+    localStorage.setItem(
+      "lofi-audio-index",
+      JSON.stringify(
+        musicList.length % 2 == 0
+          ? musicList.length / 2
+          : (musicList.length + 1) / 2
+      )
+    );
+
+  let musicIndex = JSON.parse(localStorage.getItem("lofi-audio-index") ?? "0");
 
   useEffect(() => {
     const callback = (e: any) => {
@@ -61,7 +88,7 @@ export default function MusicApp() {
     zoom: 1.5,
   }));
 
-  const ref = useRef<HTMLDivElement>(null);
+  const animatedRef = useRef<HTMLDivElement>(null);
 
   useGesture(
     {
@@ -77,7 +104,8 @@ export default function MusicApp() {
         memo,
       }) => {
         if (first) {
-          const { width, height, x, y } = ref.current!.getBoundingClientRect();
+          const { width, height, x, y } =
+            animatedRef.current!.getBoundingClientRect();
           const tx = ox - (x + width / 2);
           const ty = oy - (y + height / 2);
           memo = [style.x.get(), style.y.get(), tx, ty];
@@ -90,11 +118,41 @@ export default function MusicApp() {
       },
     },
     {
-      target: ref,
+      target: animatedRef,
       drag: { from: () => [style.x.get(), style.y.get()] },
       pinch: { scaleBounds: { min: 0.75, max: 1.5 }, rubberband: true },
     }
   );
+
+  const handleMusicChange = (operation: number) => {
+    const wasPlaying = !audioRef.current?.paused;
+    audioRef.current?.pause();
+
+    switch (operation) {
+      case 1:
+        if (musicIndex == musicList.length - 1) {
+          musicIndex = 0;
+          break;
+        }
+        musicIndex++;
+        break;
+      case -1:
+        if (musicIndex == 0) {
+          musicIndex = musicList.length - 1;
+          break;
+        }
+        musicIndex--;
+        break;
+    }
+
+    imageRef.current!.src = musicList[musicIndex].url + "lofi.jpg";
+    audioRef.current!.src = musicList[musicIndex].url + "lofi.mp3";
+    titleRef.current!.innerText = musicList[musicIndex].name;
+    audioRef.current!.volume = 0.4;
+    if (wasPlaying) audioRef.current?.play();
+
+    localStorage.setItem("lofi-audio-index", JSON.stringify(musicIndex));
+  };
 
   const musicLines = useMemo(
     () =>
@@ -137,7 +195,7 @@ export default function MusicApp() {
           item && (
             <animated.div
               className="music-app-container"
-              ref={ref}
+              ref={animatedRef}
               style={{
                 x: style.x,
                 y: to([style.y, transitionStyles.y], (y, ty) => y + ty),
@@ -169,14 +227,17 @@ export default function MusicApp() {
               </div>
               <div className="app-content-container">
                 <img
+                  ref={imageRef}
                   className="app-music-thumbnail"
                   src={musicList[musicIndex].url + "lofi.jpg"}
+                  draggable="false"
                 />
 
                 <div className="music-lines-container">
                   {musicLines.map((line, i) => (
                     <div
                       key={i}
+                      ref={musicLineRefs[i]}
                       className="music-line"
                       style={{
                         animation: `${line.duration}s linear ${line.delay}s infinite alternate random-size`,
@@ -185,11 +246,14 @@ export default function MusicApp() {
                   ))}
                 </div>
 
-                <span className="music-title">
+                <span ref={titleRef} className="music-title">
                   {musicList[musicIndex].name}
                 </span>
                 <div className="music-controls-container">
-                  <i className="fa-solid fa-backward"></i>
+                  <i
+                    className="fa-solid fa-backward"
+                    onClick={() => handleMusicChange(-1)}
+                  ></i>
                   <i
                     ref={pauseBtn}
                     className="fa-solid fa-pause"
@@ -197,6 +261,11 @@ export default function MusicApp() {
                       audioRef.current?.pause();
                       pauseBtn.current!.style.display = "none";
                       playBtn.current!.style.display = "flex";
+
+                      for (let i = 0; i < musicLineRefs.length; i++) {
+                        musicLineRefs[i].current!.style.animationPlayState =
+                          "paused";
+                      }
                     }}
                   ></i>
                   <i
@@ -207,9 +276,16 @@ export default function MusicApp() {
                       audioRef.current?.play();
                       pauseBtn.current!.style.display = "flex";
                       playBtn.current!.style.display = "none";
+
+                      for (let i = 0; i < musicLineRefs.length; i++) {
+                        musicLineRefs[i].current!.style.animationPlayState = "";
+                      }
                     }}
                   ></i>
-                  <i className="fa-solid fa-forward"></i>
+                  <i
+                    className="fa-solid fa-forward"
+                    onClick={() => handleMusicChange(1)}
+                  ></i>
                 </div>
               </div>
             </animated.div>
