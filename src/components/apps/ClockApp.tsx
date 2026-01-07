@@ -1,5 +1,11 @@
 import { useState, useEffect, useRef } from "react";
-import { useSpring, animated, useTransition, to } from "@react-spring/web";
+import {
+  useSpring,
+  animated,
+  useTransition,
+  to,
+  update,
+} from "@react-spring/web";
 import { createUseGesture, dragAction, pinchAction } from "@use-gesture/react";
 
 import {
@@ -14,7 +20,9 @@ const useGesture = createUseGesture([dragAction, pinchAction]);
 
 export default function ClockApp() {
   const [appEnabled, setAppEnabled] = useState(false);
-  const topbarRef = useRef<HTMLDivElement>(null);
+  const timeRef = useRef<HTMLSpanElement>(null);
+  const dateRef = useRef<HTMLSpanElement>(null);
+
   useEffect(() => {
     const callback = (e: any) => {
       if (e.app == 7) {
@@ -94,6 +102,23 @@ export default function ClockApp() {
     }
   );
 
+  const updateClock = () => {
+    const date = new Date();
+    if (timeRef.current == null || dateRef.current == null) return;
+
+    timeRef.current.innerText = date.toLocaleTimeString("en-GB", {
+      timeZone: "Asia/Kolkata",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+    dateRef.current.innerText = `${date.getDate()}/${
+      date.getMonth() + 1
+    }/${date.getFullYear()}`;
+  };
+
+  setInterval(updateClock, 1000);
+  updateClock();
+
   return transitions(
     (transitionStyles, item) =>
       item && (
@@ -108,11 +133,7 @@ export default function ClockApp() {
             touchAction: "none",
           }}
         >
-          <div
-            ref={topbarRef}
-            className="top-bar"
-            style={{ visibility: "visible" }}
-          >
+          <div className="top-bar" style={{ visibility: "visible" }}>
             <div className="app-controls-container">
               <div
                 className="circle"
@@ -139,17 +160,8 @@ export default function ClockApp() {
               justifyContent: "center",
             }}
           >
-            <h1 className="clock">
-              {new Date().toLocaleTimeString("en-GB", {
-                timeZone: "Asia/Kolkata",
-                hour: "2-digit",
-                minute: "2-digit",
-              })}
-            </h1>
-            <p className="clock-sub">
-              {new Date().getDate()}/{new Date().getMonth() + 1}/
-              {new Date().getFullYear()}
-            </p>
+            <span ref={timeRef} className="clock"></span>
+            <span ref={dateRef} className="clock-sub"></span>
           </div>
         </animated.div>
       )

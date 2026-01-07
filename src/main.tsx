@@ -5,7 +5,7 @@ import AppRouter from "./router/AppRouter";
 import "./index.css";
 
 document.addEventListener("contextmenu", function (event) {
-  event.preventDefault();
+  // event.preventDefault();
 });
 
 createRoot(document.getElementById("root")!).render(
