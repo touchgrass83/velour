@@ -1,0 +1,70 @@
+.clock-app-container {
+  height: 150px;
+  width: 200px;
+
+  position: absolute;
+
+  border-radius: 8px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  overflow: hidden;
+}
+
+.clock-app-container .top-bar {
+  height: 20px;
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  padding: 6px;
+
+  position: absolute;
+  top: 20px;
+  z-index: 99;
+}
+
+.clock-app-container .top-bar .app-title {
+  font-size: 8px;
+  text-transform: uppercase;
+  font-family: "Ubuntu", sans-serif;
+  font-weight: 500;
+  color: #00000060;
+}
+
+.clock-app-container .top-bar .app-controls-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+}
+
+.clock-app-container .top-bar .app-controls-container .circle {
+  height: 8px;
+  width: 8px;
+
+  border-radius: 50%;
+
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.clock-app-container:hover .top-bar .app-controls-container .circle {
+  opacity: 1;
+}
+
+.clock {
+  color: #d9d9d9;
+  font-size: 64px;
+  font-family: "Rubik Marker Hatch", system-ui;
+}
+
+.clock-sub {
+  color: #d9d9d9;
+  font-size: 12px;
+  margin-top: -50px;
+  font-family: "Rubik Marker Hatch", system-ui;
+}

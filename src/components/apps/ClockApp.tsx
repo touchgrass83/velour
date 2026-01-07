@@ -14,6 +14,7 @@ const useGesture = createUseGesture([dragAction, pinchAction]);
 
 export default function ClockApp() {
   const [appEnabled, setAppEnabled] = useState(false);
+  const topbarRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const callback = (e: any) => {
       if (e.app == 7) {
@@ -54,6 +55,11 @@ export default function ClockApp() {
   }));
   const animatedRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    if (appEnabled) {
+    }
+  }, [appEnabled]);
+
   useGesture(
     {
       onDrag: ({ pinching, cancel, offset: [x, y] }) => {
@@ -84,7 +90,7 @@ export default function ClockApp() {
     {
       target: animatedRef,
       drag: { from: () => [style.x.get(), style.y.get()] },
-      pinch: { scaleBounds: { min: 0.75, max: 1.5 }, rubberband: true },
+      pinch: { scaleBounds: { min: 1, max: 2.5 }, rubberband: true },
     }
   );
 
@@ -92,7 +98,7 @@ export default function ClockApp() {
     (transitionStyles, item) =>
       item && (
         <animated.div
-          className="music-app-container"
+          className="clock-app-container"
           ref={animatedRef}
           style={{
             x: style.x,
@@ -102,13 +108,12 @@ export default function ClockApp() {
             touchAction: "none",
           }}
         >
-          <div className="top-bar">
-            <span className="app-title">Clock App</span>
+          <div
+            ref={topbarRef}
+            className="top-bar"
+            style={{ visibility: "visible" }}
+          >
             <div className="app-controls-container">
-              <i
-                className="fa-solid fa-eye-slash"
-                style={{ color: "white", scale: 0.5 }}
-              ></i>
               <div
                 className="circle"
                 style={{ backgroundColor: "#15ff006b" }}
@@ -116,6 +121,7 @@ export default function ClockApp() {
               <div
                 className="circle"
                 style={{ backgroundColor: "#ffee008f" }}
+                onClick={() => disableApp(7)}
               ></div>
               <div
                 className="circle control-exit"
@@ -123,6 +129,27 @@ export default function ClockApp() {
                 onClick={() => disableApp(7)}
               ></div>
             </div>
+          </div>
+          <div
+            style={{
+              visibility: "visible",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <h1 className="clock">
+              {new Date().toLocaleTimeString("en-GB", {
+                timeZone: "Asia/Kolkata",
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+            </h1>
+            <p className="clock-sub">
+              {new Date().getDate()}/{new Date().getMonth() + 1}/
+              {new Date().getFullYear()}
+            </p>
           </div>
         </animated.div>
       )

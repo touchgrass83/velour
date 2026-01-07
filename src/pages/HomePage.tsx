@@ -19,8 +19,8 @@ export default function HomePage() {
 
         <NavBar />
 
-        <MusicApp />
         <ClockApp />
+        <MusicApp />
       </div>
     </FullScreen>
   );

@@ -217,6 +217,7 @@ export default function MusicApp() {
                   <div
                     className="circle"
                     style={{ backgroundColor: "#ffee008f" }}
+                    onClick={() => disableApp(1)}
                   ></div>
                   <div
                     className="circle control-exit"
