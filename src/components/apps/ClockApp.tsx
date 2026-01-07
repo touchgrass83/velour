@@ -1,11 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import {
-  useSpring,
-  animated,
-  useTransition,
-  to,
-  update,
-} from "@react-spring/web";
+import { useSpring, animated, useTransition, to } from "@react-spring/web";
 import { createUseGesture, dragAction, pinchAction } from "@use-gesture/react";
 
 import {
